@@ -30,8 +30,9 @@ RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php5/fpm/php-fpm.co
 RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/fpm/php.ini
 
 # install mongodb
-ADD mongodb.repo /etc/yum.repos.d/mongodb.repo
-RUN yum install -y mongodb-org
+RUN DEBIAN_FRONTEND="noninteractive" sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+RUN echo "deb http://repo.mongodb.org/apt/ubuntu "$(lsb_release -sc)"/mongodb-org/3.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.0.list
+RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y mongodb-org
 RUN mkdir /data
 RUN mkdir /data/db
 
