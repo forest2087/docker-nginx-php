@@ -38,9 +38,10 @@ RUN mkdir /data
 RUN mkdir /data/db
 
 # PHP mongo driver
-RUN DEBIAN_FRONTEND="noninteractive" pecl install mongodb
+#RUN DEBIAN_FRONTEND="noninteractive" pecl install mongodb
+#RUN echo "extension=mongodb.so" >> /etc/php5/fpm/php.ini
 
-RUN echo "extension=mongodb.so" >> /etc/php5/fpm/php.ini
+RUN DEBIAN_FRONTEND="noninteractive" apt-get install php5-mongo
  
 RUN mkdir -p        /var/www
 ADD build/default   /etc/nginx/sites-available/default
