@@ -30,9 +30,9 @@ RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php5/fpm/php-fpm.co
 RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/fpm/php.ini
 
 #PHP mongo driver
-RUN DEBIAN_FRONTEND="noninteractive" pecl install mongo
+RUN DEBIAN_FRONTEND="noninteractive" pecl install mongodb
 
-RUN echo "extension=mongo.so" >> /etc/php5/fpm/php.ini
+RUN echo "extension=mongodb.so" >> /etc/php5/fpm/php.ini
  
 RUN mkdir -p        /var/www
 ADD build/default   /etc/nginx/sites-available/default
