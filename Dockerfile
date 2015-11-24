@@ -29,7 +29,13 @@ RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php5/fpm/php-fpm.conf
 RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/fpm/php.ini
 
-#PHP mongo driver
+# install mongodb
+ADD mongodb.repo /etc/yum.repos.d/mongodb.repo
+RUN yum install -y mongodb-org
+RUN mkdir /data
+RUN mkdir /data/db
+
+# PHP mongo driver
 RUN DEBIAN_FRONTEND="noninteractive" pecl install mongodb
 
 RUN echo "extension=mongodb.so" >> /etc/php5/fpm/php.ini
@@ -42,6 +48,9 @@ RUN chmod +x        /etc/service/nginx/run
 RUN mkdir           /etc/service/phpfpm
 ADD build/phpfpm.sh /etc/service/phpfpm/run
 RUN chmod +x        /etc/service/phpfpm/run
+RUN mkdir           /etc/service/mongod
+ADD build/mongodb.sh /etc/service/mongod/run
+RUN chmod +x        /etc/service/mongod/run
 
 EXPOSE 80
 # End Nginx-PHP
