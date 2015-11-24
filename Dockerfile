@@ -28,6 +28,11 @@ RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y nginx
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php5/fpm/php-fpm.conf
 RUN sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/fpm/php.ini
+
+#PHP mongo driver
+RUN DEBIAN_FRONTEND="noninteractive" pecl install mongo
+
+RUN echo "extension=mongo.so" >> /etc/php5/fpm/php.ini
  
 RUN mkdir -p        /var/www
 ADD build/default   /etc/nginx/sites-available/default
@@ -43,7 +48,4 @@ EXPOSE 80
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-#PHP mongo driver
-RUN DEBIAN_FRONTEND="noninteractive" pecl install mongo
 
-RUN echo "extension=mongo.so" >> /etc/php5/fpm/php.ini
